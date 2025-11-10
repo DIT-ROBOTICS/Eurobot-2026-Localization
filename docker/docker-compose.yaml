@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  eurobot-2026-localization:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USERNAME: user
+    image: localization2026
+    container_name: localization-devel
+    stdin_open: true
+    tty: true
+    network_mode: host
+    ipc: host
+    privileged: true
+
+    volumes:
+      # Mount local timezone into container. ( Readonly )
+      # Reference: https://stackoverflow.com/questions/57607381/how-do-i-change-timezone-in-a-docker-container
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /dev:/dev
+      # Mount X11 server
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XAUTHORITY:-$HOME/.Xauthority}:${XAUTHORITY:-$HOME/.Xauthority}:ro
+      # Mount Gazebo models directory to reuse models downloaded during first launch.
+      # Reference: https://answers.ros.org/question/365658
+      # - ./cache/.gazebo:/home/localization/.gazebo
+      - /run/user/1000:/tmp/runtime-root
+      # Mount workspace
+      - ../core_algorithm:/home/user/localization-ws/src/core_algorithm
+    working_dir: /home/user/localization-ws
+    
+    environment:
+      - DISPLAY=${DISPLAY}  # Set display environment variable
+      - XAUTHORITY=/root/.Xauthority   # Set Xauthority path
+      - ROS_WS=/home/user/localization-ws
+      - XDG_RUNTIME_DIR=/tmp/runtime-root
+      # - QT_QPA_PLATFORM=xcb
+      # - ROS_HOSTNAME=192.168.50.11
+      # - ROS_MASTER_URI=http://192.168.50.11:11311
+      # - ROS_DOMAIN_ID=14
+
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+
+    command: /bin/bash
