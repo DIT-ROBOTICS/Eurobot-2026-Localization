@@ -1,0 +1,28 @@
+<launch>
+
+	<arg name="robot_name" default="robot"/>
+	<arg name="robot_name_slash" default="robot/"/>
+
+	<arg name="param" default="1"/>
+    <arg name="simulation" default="false" />
+
+    <!-- Open imu firmware -->
+    
+    <include file="$(find-pkg-share phidgets_spatial)/launch/spatial-launch.py" unless="$(var simulation)">
+		<arg name="robot_name" value="$(var robot_name)"/>        
+        <arg name="robot_name_slash" value="$(var robot_name_slash)"/> 
+    </include>
+    
+    <node pkg="imu_drive" exec="imu_drive_node" name="IMU_DRIVE" >
+
+        <param from="$(find-pkg-share imu_drive)/config/imu_drive_firm.yaml" />
+
+        <remap from="sub_topic" to="/imu/data_raw"/>
+        <remap from="pub_topic" to="/imu/data_cov"/>
+        <remap from="/cmd_vel" to="/cmd_vel"/>
+
+        <param name="frame" value="imu_link"/>
+
+    </node>
+
+</launch>

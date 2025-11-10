@@ -1,0 +1,16 @@
+<launch>
+    <arg name="fixed_name" default="side"/>
+    
+    <node name="fixed_laser_to_map" pkg="tf2_ros" exec="static_transform_publisher"
+        args="1.845 2.07 0 0 0 0 1 map $(var fixed_name)/laser" />
+    
+    <group>
+        <push-ros-namespace namespace="$(var fixed_name)" />
+        <include file = "/home/user/localization-ws/src/localization-devel-ws/rival_localization/launch/view_rplidar_s3_launch.py" />
+        
+        <node name="fixed_obstacle_detector_to_map" pkg="obstacle_detector" exec="obstacle_extractor_node">
+            <param from="/home/user/localization-ws/src/localization-devel-ws/rival_localization/config/side_obstacles.yaml"/>
+            <remap from="raw_obstacles" to="side_obstacles_to_map" />
+        </node>
+    </group>
+</launch>

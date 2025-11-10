@@ -1,0 +1,63 @@
+<launch>
+
+    <arg name="robot_name" default="robot"/>
+    <arg name="robot_name_slash" default="robot/"/>
+    <arg name="simulation" default="false"/>
+    <arg name="LPF_alpha_x" default="0.5"/>
+    <arg name="LPF_alpha_y" default="0.5"/>
+    <arg name="linear_cov_max" default="0.06"/>
+    <arg name="angular_cov_max" default="0.05"/>
+    <arg name="odom_param" default="1"/>
+    <arg name="imu_param" default="0"/>
+
+    <!-- <group> -->
+        <!-- <push-ros-namespace namespace="$(var robot_name)"/> -->
+
+        <!-- <arg name="local_filter_whole_yaml" value="$(find local_filter)/param/local_filter_whole.yaml" /> -->
+        <!-- <node pkg="local_filter" exec="local_filter_LPF" name="local_filter_LPF">
+            <param from="$(find local_filter)/param/local_filter_whole.yaml"/>
+        </node> -->
+
+        <!-- Local filter by robot localization -->
+        <!-- <node pkg="robot_localization" type="ekf_localization_node" name="ekf_velocity"
+            clear_params="true">
+            <remap from="odometry/filtered" to="global_filter" />
+            <remap from="set_pose" to="initialpose" />
+            <remap from="/diagnostics" to="~diagnostics" />
+            <remap from="/odom" to="$(arg robot_name)/odom" />
+            <remap from="/imu/data_cov" to="$(arg robot_name)/imu/data_cov" />
+
+            <param name="map_frame" value="$(arg robot_name_slash)map" />
+            <param name="odom_frame" value="$(arg robot_name_slash)odom" />
+            <param name="base_link_frame" value="$(arg robot_name_slash)base_footprint" />
+            <param name="world_frame" value="$(arg robot_name_slash)odom" />
+        </node> -->
+
+        <node name="local_filter_LPF" pkg="local_filter" exec="local_filter_LPF" >
+            <!-- <param from="$(find-pkg-share local_filter)/param/local_filter_whole.yaml" /> -->
+            <param name="LPF_alpha_x" value="$(var LPF_alpha_x)"/>
+            <param name="LPF_alpha_y" value="$(var LPF_alpha_y)"/>
+            <param name="linear_cov_max" value="$(var linear_cov_max)"/>
+            <param name="angular_cov_max" value="$(var angular_cov_max)"/>
+            <!-- <remap from="odoo_googoogoo" to="driving_duaiduaiduai"/> -->
+            <!-- <remap from="initial_pose" to="initialpose"/> -->
+        </node>
+
+        <!-- Odometry firmware and covariance feedback loop node (contain communication) -->
+        <!-- <include file="$(find-pkg-share wheel_odom)/launch/odometry_comm.launch">
+            <arg name="robot_name" value="$(var robot_name)" />
+            <arg name="robot_name_slash" value="$(var robot_name_slash)" />
+            <arg name="param" value="$(var odom_param)" />
+            <arg name="simulation" value="$(var simulation)" />
+        </include> -->
+
+        <!-- IMU firmware and covariance feedback loop node (contain IMU spatial launch) -->
+        <include file="$(find-pkg-share imu_drive)/launch/imu_drive_firm.xml">
+            <arg name="robot_name" value="$(var robot_name)" />
+            <arg name="robot_name_slash" value="$(var robot_name_slash)" />
+            <arg name="param" value="$(var imu_param)" />
+            <arg name="simulation" value="$(var simulation)" />
+        </include>
+    <!-- </group> -->
+
+</launch>

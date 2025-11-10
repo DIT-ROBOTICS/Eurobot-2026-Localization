@@ -1,0 +1,20 @@
+IMU_DRIVE:
+  ros__parameters:
+    # Set the usage of the node
+    active: true
+    publish: true
+
+    # Covariance for "const" part
+    covariance_vx: 0.05
+    covariance_vy: 0.05
+    covariance_vz: 0.01
+    covariance_ax: 0.11
+    covariance_ay: 0.11
+    covariance_az: 0.2
+
+    # Covariance for "multiple" part
+    cov_multi_vel: 0.02
+    cov_multi_acl: 0.02
+
+    # Low pass filter -> believe previous
+    filter_prev: 0.1

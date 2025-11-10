@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="map_to_robot" output="screen" args="--x 2.830 --y 0.03 --z 0 --roll 0 --pitch 0 --yaw 0 --frame-id /map --child-frame-id /base_footprint" />
+    <node pkg="lidar_localization_pkg" exec="lidar_calibrator" name="lidar_calibrator" output="screen"/>
+    <include file="/home/user/localization-ws/src/localization-devel-ws/global/lidar_localization_pkg/launch/view_obstacles_launch.xml" />  
+</launch>

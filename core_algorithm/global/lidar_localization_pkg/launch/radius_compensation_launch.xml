@@ -1,0 +1,20 @@
+<launch>
+    <!-- pred pose publisher -->
+    <node pkg="lidar_localization_pkg" exec="pred_pose_publisher" name="pred_pose_publisher" output="screen">
+        <remap from="pred_pose" to="final_pose"/>
+    </node>
+    <!-- lidar localization -->
+
+    <node pkg="lidar_localization_pkg" exec="lidar_localization" name="lidar_localization" output="screen">
+        <param name="side" value="1"/>
+        <param name="beacon_radius" value="0.1"/>  
+        <param name="radius_compensation" value="True"/>
+        <param name="consistency_threshold" value="0.97"/>
+    </node>
+    <!-- publish static transform map to laser -->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="robot_to_laser" output="screen" args="--x 0 --y 0 --z 0 --roll 0 --pitch 0 --yaw 0 --frame-id /base_footprint --child-frame-id /laser" />
+    <!-- rplidar -->
+    <include file="/home/user/localization-ws/src/localization-devel-ws/global/lidar_localization_pkg/launch/firmware/rplidar_s3_launch.py" />
+    <!-- obstacles -->
+    <include file="$/home/user/localization-ws/src/localization-devel-ws/global/lidar_localization_pkg/launch/obstacle_extractor_launch.xml" />
+</launch>

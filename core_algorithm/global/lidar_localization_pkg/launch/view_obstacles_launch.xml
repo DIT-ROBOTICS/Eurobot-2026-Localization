@@ -1,0 +1,11 @@
+<launch>
+    <!-- publish static transform map to laser -->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="robot_to_laser" output="screen" args="--x 0 --y 0 --z 0 --roll 0 --pitch 0 --yaw 0 --frame-id /base_footprint --child-frame-id /laser" />
+    <!-- rplidar -->
+    <!-- <include file="/home/user/localization-ws/src/localization-devel-ws/global/lidar_localization_pkg/launch/firmware/rplidar_s3_launch.py" /> -->
+    <!-- ydlidar -->
+    <include file="/home/user/localization-ws/src/localization-devel-ws/global/lidar_localization_pkg/launch/firmware/ydlidar_launch.py" /> 
+    <!-- <include file="$(find-pkg-share rplidar_ros)/launch/view_rplidar_s3_launch.py" /> -->
+    <!-- obstacles -->
+    <include file="/home/user/localization-ws/src/localization-devel-ws/global/lidar_localization_pkg/launch/obstacle_extractor_launch.xml" />
+</launch>

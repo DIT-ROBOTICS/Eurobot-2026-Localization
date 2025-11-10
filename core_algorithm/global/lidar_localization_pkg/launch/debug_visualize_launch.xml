@@ -1,0 +1,32 @@
+<launch>
+
+    <node pkg="lidar_localization_pkg" exec="lidar_localization" name="lidar_localization" output="screen">
+    <!-- load ROS2 params from yaml -->
+        <!-- <param from="$(find-pkg-share lidar_localization_pkg)/config/lidar_localization.yml" /> -->
+        <param name="side" value="0"/>
+        <param name="debug_mode" value="False"/>
+        <param name="visualize_candidate" value="True"/>
+        <param name="likelihood_threshold" value="0.002"/>
+        <param name="consistency_threshold" value="0.9"/>
+    </node>
+
+    <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher" output="screen" args="0 0 0 0 0 0 map laser_link" /> -->
+    <!-- Arguments: x y z yaw pitch roll frame_id child_frame_id -->
+    <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher_a" output="screen" args="3.094 0.052 0 0 0 0 map beacon_a" />
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher_b" output="screen" args="3.094 1.948 0 0 0 0 map beacon_b" />
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher_c" output="screen" args="-0.094 1.0 0 0 0 0 map beacon_c" /> -->
+    <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher_a" output="screen" args="-0.094 0.052 0 0 0 0 map beacon_a" />
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher_b" output="screen" args="-0.094 1.948 0 0 0 0 map beacon_b" />
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher_c" output="screen" args="3.094 1.0 0 0 0 0 map beacon_c" /> -->
+
+    <!-- launch pred_publisher -->
+    <!-- <node pkg="lidar_localization_pkg" exec="pred_publisher" name="pred_publisher" output="screen"> -->
+        <!-- Add any necessary parameters or remappings here -->
+    <!-- </node> -->
+
+    <include file="$(find-pkg-share lidar_localization_pkg)/launch/view_obstacles_launch.xml" />
+<!-- 
+    <include file="$(find-pkg-share foxglove_bridge)/launch/foxglove_bridge_launch.xml">
+        <arg name="port" value="8765" /> -->
+    </include>
+</launch>

@@ -1,0 +1,47 @@
+<launch>
+
+    <!-- launch settings, CHECK before launch -->
+    <arg name="play_bag" default="true"/>
+    <arg name="record_bag" default="true"/>
+    <arg name="use_foxglove" default="true" />
+
+    <!-- function settings -->
+    <arg name="bag_folder" default="/home/user/localization-ws/src/localization-devel-ws/bag" />
+    <!--                     PLAY                        -->
+    <arg name='name_of_play_file' default='rosbag2_2025_03_19-18_15_20' />
+    <!--                    RECORD                       -->
+    <arg name='name_of_record_file' default='not_use_tf_HP' />
+
+    <!-- functions -->
+    <executable cmd="ros2 bag play $(var bag_folder)/$(var name_of_play_file) --clock --topic  /raw_obstacles /raw_obstacles_visualization /local_filter" output="screen" if="$(var play_bag)"/>
+    <executable cmd="ros2 bag record --output $(var bag_folder)/$(var name_of_record_file) /raw_obstacles /raw_obstacles_visualizaton /lidar_pose /final_pose" output="screen" if="$(var record_bag)"/>
+    <!-- <executable cmd="ros2 topic echo /odoo_googoogoo geometry_msgs/Twist" output="screen" if="$(var record_bag)"/> -->
+    
+    <node pkg="ekf" exec="ekf_node" name="ekf_node" output="screen">
+        <param name="use_cam" value="0" />  
+        <param name="robot_parent_frame_id" value="map" />
+        <param name="robot_frame_id" value="base_footprint" />
+        <param name="/use_sim_time" value="true" />
+        <param name="q_linear" value="1e-5" />
+        <param name="q_angular" value="1e-6" />
+        <param name="r_camra_linear" value="1e-2"  />
+        <param name="r_camra_angular" value="0.15"  />
+        <param name="r_threshold_xy" value="1e-3"    />
+        <param name="r_threshold_theta" value="1e-2" />
+    </node>
+
+    <node pkg="lidar_localization_pkg" exec="lidar_localization" name="lidar_localization" output="screen">
+        <param name="side" value="1"/>
+        <param name="/use_sim_time" value="true" />
+        <param name="debug_mode" value="False"/>
+        <param name="visualize_candidate" value="False"/>
+        <param name="likelihood_threshold" value="0.00001"/>
+        <param name="consistency_threshold" value="0.97"/>
+    </node>
+
+    <include file="$(find-pkg-share foxglove_bridge)/launch/foxglove_bridge_launch.xml" if="$(var use_foxglove)">
+        <arg name="port" value="8760" />
+    </include>
+
+
+</launch>

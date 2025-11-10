@@ -1,0 +1,15 @@
+*.vscode
+bag/
+report/
+
+# ROS #
+#######
+build/
+install/
+log/
+
+# Python #
+##########
+*.pyc
+*.pyo
+__pycache__/

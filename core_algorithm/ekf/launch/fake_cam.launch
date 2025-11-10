@@ -1,0 +1,20 @@
+<launch>
+    <!-- Declare arguments -->
+    <arg name="robot_name" default="robot" />
+    <arg name="robot_name_slash" default="robot/" />
+    
+    <!-- Set simulation time -->
+    <group>
+        <push_ros_namespace namespace = "$(var robot_name)"/>
+            <node pkg="ekf" exec="ekf_node" name="ekf_node" output="screen">
+                <param name="robot_parent_frame_id" value="$(var robot_name_slash)map" />
+                <param name="robot_frame_id" value="$(var robot_name_slash)base_footprint" />
+                <param name="update_rate" value="100" />
+                <param name="/use_sim_time" value="true" />
+            </node>
+            <node pkg="ekf" exec="fake_cam" name="cam_pub" output="screen">
+            <param name="/use_sim_time" value="true" />
+            </node>
+    </group>
+    <executable cmd="ros2 bag play /home/user/localization-ws/src/localization-devel-ws/ekf/baggy/0502_omni_4_ros2 --clock --topic /robot/local_filter " />
+</launch>

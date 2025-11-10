@@ -1,0 +1,14 @@
+<launch>
+
+    <arg name="robot_name" default="robot" />
+    <arg name="rival_name" default="rival" />
+
+    <include file ="$(find-pkg-share rival_localization)/launch/rival_localization.xml"/>
+
+    <node name="imm_filter_node" pkg="imm_filter" exec="imm_filter_node" output="screen">
+
+        <remap from="raw_pose" to="/$(var rival_name)/raw_pose" />
+        <remap from="final_pose" to="/$(var rival_name)/final_pose"/>
+    </node>
+
+</launch>

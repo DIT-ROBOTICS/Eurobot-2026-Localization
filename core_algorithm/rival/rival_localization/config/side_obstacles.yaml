@@ -1,0 +1,22 @@
+# Obstacle Extractor (side)
+side/fixed_obstacle_detector_to_map: 
+  ros__parameters:
+    active: true
+    use_scan: true
+    use_pcl: false
+    frame_id: map
+
+    use_split_and_merge: false
+    circles_from_visibles: true
+    discard_converted_segments: true
+    transform_coordinates: true
+    
+    min_group_points: 10
+
+    max_group_distance: 0.2
+    distance_proportion: 0.00628
+    max_split_distance: 0.02
+    max_merge_separation: 0.2
+    max_merge_spread: 0.2
+    max_circle_radius: 0.25
+    radius_enlargement: 0.0
