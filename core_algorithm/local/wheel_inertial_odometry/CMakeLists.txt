@@ -20,9 +20,9 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 
 # add executables
-add_executable(local_filter_LPF src/local_filter_LPF.cpp)
+add_executable(WIO_LPF src/WIO_LPF.cpp)
 ament_target_dependencies(
-  local_filter_LPF 
+  WIO_LPF 
   rclcpp nav_msgs 
   sensor_msgs 
   geometry_msgs 
@@ -35,7 +35,7 @@ ament_target_dependencies(
 
 # install executables
 install(TARGETS
-  local_filter_LPF
+  WIO_LPF
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -51,7 +51,7 @@ install(DIRECTORY
 )
 
 # install(
-#   # TARGETS local_filter_LPF
+#   # TARGETS WIO_LPF
 #   EXPORT export_${PROJECT_NAME}
 #   LIBRARY DESTINATION lib
 #   ARCHIVE DESTINATION lib
