@@ -7,7 +7,6 @@ x-common-vars: &ros2-vars
   network_mode: host
   working_dir: /home/user/localization-ws
   environment:
-    - DISPLAY=${DISPLAY}
     # Set ros2 environment variables.
     # References:
     # - https://docs.ros.org/en/humble/Concepts/Intermediate/About-Domain-ID.html
@@ -38,6 +37,8 @@ services:
     image: localization2026
     container_name: localization-devel
     <<: *ros2-vars
+    environment:
+      - DISPLAY=${DISPLAY}
     command: /bin/bash
 
   localization-run:
@@ -46,10 +47,7 @@ services:
     container_name: localization-run
     <<: 
       - *ros2-vars
-    command: /bin/bash -c "
-        source /opt/ros/humble/setup.bash && 
-        source /home/user/localization-ws/install/setup.bash"
-        # ros2 launch ${ROS2_LAUNCH_FILE}"
+    command: /bin/bash
 
   # containers for comunicating with firmware
   ros-core:
