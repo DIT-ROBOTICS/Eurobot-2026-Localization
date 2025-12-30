@@ -7,20 +7,45 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclpy REQUIRED)
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(Eigen3 REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 # Include Cpp "include" directory
 include_directories(include)
 
+# Declare a C++ library
+add_library(ekf
+ src/ekf.cpp
+)
+
 # Create Cpp executable
+add_executable(fusion_node src/fusion_node.cpp)
+ament_target_dependencies(
+  fusion_node
+  rclcpp nav_msgs 
+  geometry_msgs 
+  Eigen3
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
+)
+target_link_libraries(fusion_node
+  ekf
+)
 
 # Install Cpp executables
 install(TARGETS
+  fusion_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
